@@ -15,8 +15,7 @@ type token =
   | RPAR
 
 open Parsing;;
-# 1 "parser.mly"
-
+# 2 "parser.mly"
 type newState = WildCard | NewState of int
 		and variable = Var of string		
 		and cond = Equals of variable * int | And of cond list | 
@@ -28,7 +27,7 @@ type newState = WildCard | NewState of int
 		and elseIf = ElseIf of cond * statement
 		and rule = Rule of int list * statement
 		and character = Character of rule list
-# 32 "parser.ml"
+# 31 "parser.ml"
 let yytransl_const = [|
   259 (* IF *);
   260 (* DECISION *);
@@ -143,13 +142,13 @@ let yyact = [|
     Obj.repr(
 # 25 "parser.mly"
                          ( _2 )
-# 147 "parser.ml"
+# 146 "parser.ml"
                : character))
 ; (fun __caml_parser_env ->
     Obj.repr(
 # 26 "parser.mly"
                          ( Character([]) )
-# 153 "parser.ml"
+# 152 "parser.ml"
                : 'charac))
 ; (fun __caml_parser_env ->
     let _1 = (Parsing.peek_val __caml_parser_env 1 : 'charac) in
@@ -158,13 +157,13 @@ let yyact = [|
 # 27 "parser.mly"
                   ( let Character(ruleList) = _1 in 
 				   Character(ruleList @ [_2])	)
-# 162 "parser.ml"
+# 161 "parser.ml"
                : 'charac))
 ; (fun __caml_parser_env ->
     Obj.repr(
 # 30 "parser.mly"
                             ( [] )
-# 168 "parser.ml"
+# 167 "parser.ml"
                : 'ints))
 ; (fun __caml_parser_env ->
     let _1 = (Parsing.peek_val __caml_parser_env 1 : 'ints) in
@@ -172,13 +171,13 @@ let yyact = [|
     Obj.repr(
 # 31 "parser.mly"
                             ( _1 @ [_2] )
-# 176 "parser.ml"
+# 175 "parser.ml"
                : 'ints))
 ; (fun __caml_parser_env ->
     Obj.repr(
 # 33 "parser.mly"
                             ( [] )
-# 182 "parser.ml"
+# 181 "parser.ml"
                : 'elseifs))
 ; (fun __caml_parser_env ->
     let _1 = (Parsing.peek_val __caml_parser_env 1 : 'elseifs) in
@@ -186,13 +185,13 @@ let yyact = [|
     Obj.repr(
 # 34 "parser.mly"
                      ( _1 @ [_2] )
-# 190 "parser.ml"
+# 189 "parser.ml"
                : 'elseifs))
 ; (fun __caml_parser_env ->
     Obj.repr(
 # 36 "parser.mly"
                             ( [] )
-# 196 "parser.ml"
+# 195 "parser.ml"
                : 'arms))
 ; (fun __caml_parser_env ->
     let _1 = (Parsing.peek_val __caml_parser_env 1 : 'arms) in
@@ -200,7 +199,7 @@ let yyact = [|
     Obj.repr(
 # 37 "parser.mly"
                             ( _1 @ [_2] )
-# 204 "parser.ml"
+# 203 "parser.ml"
                : 'arms))
 ; (fun __caml_parser_env ->
     let _2 = (Parsing.peek_val __caml_parser_env 2 : 'ints) in
@@ -208,7 +207,7 @@ let yyact = [|
     Obj.repr(
 # 39 "parser.mly"
                                      ( Rule(_2,_3) )
-# 212 "parser.ml"
+# 211 "parser.ml"
                : 'rule))
 ; (fun __caml_parser_env ->
     let _3 = (Parsing.peek_val __caml_parser_env 6 : 'cond) in
@@ -218,7 +217,7 @@ let yyact = [|
     Obj.repr(
 # 41 "parser.mly"
                                                        ( If(_3,_4,_6,_8) )
-# 222 "parser.ml"
+# 221 "parser.ml"
                : 'stmt))
 ; (fun __caml_parser_env ->
     let _3 = (Parsing.peek_val __caml_parser_env 2 : 'new_state) in
@@ -226,7 +225,7 @@ let yyact = [|
     Obj.repr(
 # 42 "parser.mly"
                                                 ( Decision(_3,_4) )
-# 230 "parser.ml"
+# 229 "parser.ml"
                : 'stmt))
 ; (fun __caml_parser_env ->
     let _3 = (Parsing.peek_val __caml_parser_env 5 : 'variable) in
@@ -235,7 +234,7 @@ let yyact = [|
     Obj.repr(
 # 43 "parser.mly"
                                                 ( Case(_3,_5,_7) )
-# 239 "parser.ml"
+# 238 "parser.ml"
                : 'stmt))
 ; (fun __caml_parser_env ->
     let _3 = (Parsing.peek_val __caml_parser_env 2 : 'cond) in
@@ -243,7 +242,7 @@ let yyact = [|
     Obj.repr(
 # 45 "parser.mly"
                                     ( ElseIf(_3,_4) )
-# 247 "parser.ml"
+# 246 "parser.ml"
                : 'elseif))
 ; (fun __caml_parser_env ->
     let _4 = (Parsing.peek_val __caml_parser_env 3 : 'ints) in
@@ -251,13 +250,13 @@ let yyact = [|
     Obj.repr(
 # 47 "parser.mly"
                                         ( Arm(_4,_6) )
-# 255 "parser.ml"
+# 254 "parser.ml"
                : 'arm))
 ; (fun __caml_parser_env ->
     Obj.repr(
 # 49 "parser.mly"
                             ( [] )
-# 261 "parser.ml"
+# 260 "parser.ml"
                : 'conds))
 ; (fun __caml_parser_env ->
     let _1 = (Parsing.peek_val __caml_parser_env 1 : 'conds) in
@@ -265,7 +264,7 @@ let yyact = [|
     Obj.repr(
 # 50 "parser.mly"
                       ( _1 @ [_2] )
-# 269 "parser.ml"
+# 268 "parser.ml"
                : 'conds))
 ; (fun __caml_parser_env ->
     let _3 = (Parsing.peek_val __caml_parser_env 2 : 'variable) in
@@ -273,41 +272,41 @@ let yyact = [|
     Obj.repr(
 # 52 "parser.mly"
                                       ( Equals(_3, _4) )
-# 277 "parser.ml"
+# 276 "parser.ml"
                : 'cond))
 ; (fun __caml_parser_env ->
     let _3 = (Parsing.peek_val __caml_parser_env 1 : 'conds) in
     Obj.repr(
 # 53 "parser.mly"
                                ( And(_3) )
-# 284 "parser.ml"
+# 283 "parser.ml"
                : 'cond))
 ; (fun __caml_parser_env ->
     let _3 = (Parsing.peek_val __caml_parser_env 1 : 'conds) in
     Obj.repr(
 # 54 "parser.mly"
                                ( Or(_3) )
-# 291 "parser.ml"
+# 290 "parser.ml"
                : 'cond))
 ; (fun __caml_parser_env ->
     let _3 = (Parsing.peek_val __caml_parser_env 1 : string) in
     Obj.repr(
 # 56 "parser.mly"
                                       ( Var(_3) )
-# 298 "parser.ml"
+# 297 "parser.ml"
                : 'variable))
 ; (fun __caml_parser_env ->
     let _1 = (Parsing.peek_val __caml_parser_env 0 : int) in
     Obj.repr(
 # 58 "parser.mly"
                       ( NewState(_1) )
-# 305 "parser.ml"
+# 304 "parser.ml"
                : 'new_state))
 ; (fun __caml_parser_env ->
     Obj.repr(
 # 59 "parser.mly"
                ( WildCard)
-# 311 "parser.ml"
+# 310 "parser.ml"
                : 'new_state))
 (* Entry input *)
 ; (fun __caml_parser_env -> raise (Parsing.YYexit (Parsing.peek_val __caml_parser_env 0)))
@@ -332,6 +331,3 @@ let yytables =
 let input (lexfun : Lexing.lexbuf -> token) (lexbuf : Lexing.lexbuf) =
    (Parsing.yyparse yytables 1 lexfun lexbuf : character)
 ;;
-# 61 "parser.mly"
-
-# 338 "parser.ml"
