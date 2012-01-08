@@ -1,7 +1,8 @@
 (* Dominik Szczepanski - modu³ zamieniajacy ifa na case'a (jesli mozna i sie oplaca) *)
+
 open Parser
 open List
-open SizeCounter
+open Sizecounter
 open Sort
 
 module type IFTOCASE =
@@ -92,7 +93,7 @@ struct
 					
 	(* metoda bierze zmienna i warunek, zwraca liste wartosci zmiennej do arma oraz dodatkowy cond ktory pojawi sie w armie w IF *)
 	let variable_othercond_if variable cond = match cond with
-												| Equals (variable, v) -> ([v], And [])
+												| Equals (varr, v) -> if (varr = variable) then ([v], And []) else ([], And [])
 												| Or condlist -> let (orlist, can_proceed) = not_exists_other_variable_in_or variable condlist in
 																 if (can_proceed && (orlist <> [])) then (orlist, And []) (* or ale z samym podanym variable, jezeli nie wystepuje variable to urywamy case'a *)
 																 else 
@@ -107,6 +108,8 @@ struct
 													| x::xs -> let ElseIf (cond,st) = x in (variable_othercond_if variable cond, st) :: 
 													variable_othercond_elseif variable xs;;
 
+													
+	let last l = ( List.nth l ((List.length l) -1 ) );;
 													
 	(* przeglada liste elseif i zwraca dla kazdego statement, dodatkowo trzyma w akumulatorze dodatkowe warunki - byc moze utworzymy IF w ARMie 
 	- o ile jest to mozliwe *)
@@ -131,18 +134,19 @@ struct
 																			(a, b)
 																	end
 																	
-																	else if (condacc <> And [] && cond = And []) then (* mielismy gdzies np x = 2 AND y = 7 , teraz mamy np x = 3, w takim razie jezeli jest x = 2 to mozemy zrobic IFa w ARM *)
+																	else if ( (condacc <> And [] && cond = And []) || (condacc <> And [] && cond <> And [] && (List.length xs) = 0))
+																	 then (* mielismy gdzies np x = 2 AND y = 7 , teraz mamy np x = 3, w takim razie jezeli jest x = 2 to mozemy zrobic IFa w ARM *)
 																				if (values = lastval) then begin (* mozemy zrobic IFa *)
 																						 if ((List.length condvalstacc) = 1) then  (* sam if, bez elseif *) 
 																							let ifst = If (condacc, lastst, [], st) in
-																							let (a,b) = is_case_possible_statements_elseif xs [(cond, values, st)] in
+																							let (a,b) = is_case_possible_statements_elseif xs [(And [], values, st)] in
 																							(a, ((values, ifst) :: b)) 
 																						
 																				        else if ((List.length condvalstacc) > 1) then begin (* dorzucamy elseify *)
 																							let elseifs = map (fun x -> let (cond,values,st) = x in ElseIf (cond,st)) condvalstacc in 
-																							let (condacc2,lastval2,lastst2) = List.hd condvalstacc in 
-																							let ifst = If (condacc2, lastst2, (List.tl elseifs), st) in
-																							let (a,b) = is_case_possible_statements_elseif xs [(cond, values, st)] in
+																							let (condacc2,lastval2,lastst2) = last condvalstacc in 
+																							let ifst = If (condacc2, lastst2, (List.tl (List.rev elseifs)), st) in
+																							let (a,b) = is_case_possible_statements_elseif xs [(And [], values, st)] in
 																							(a, ((values, ifst) :: b))
 																	
 																						end  
@@ -153,7 +157,7 @@ struct
 																	else 
 																	if (values = lastval) then begin
 																		let newcondvalstacc = (cond, values, st) in  (* zbieramy do elseifow warunki i st *)
-																		let app = rev_append condvalstacc [newcondvalstacc] in 
+																		let app =  newcondvalstacc :: condvalstacc in 
 																		is_case_possible_statements_elseif xs app
 																	end else (false, []) ;; (* mamy przypadek x = 5 AND y = 7 AND z = 8 AND v = 9, potem np x = 5 AND p = 5 a potem X = 6 *)
 
@@ -171,7 +175,7 @@ struct
 																			if (fval = values) then (a, b) else
 																		(a, ((l, st1) :: b) ) 
 																	else (false, []) 
-																else (a, [(l, st1)]) ;;
+																else (true, [(l, st1)]) ;;
 												
 												
 												
